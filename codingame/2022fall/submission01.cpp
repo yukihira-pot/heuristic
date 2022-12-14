@@ -86,37 +86,47 @@ int dy[] = {-1, 0, 1, 0, 1, -1, -1, 1};
 // using mint = atcoder::modint998244353;
 // using mint = atcoder::modint1000000007;
 
+void move_action(int amount, int orig_w, int orig_h, int new_w, int new_h) {
+    cout << "MOVE " << amount << " " << orig_w << " " << orig_h << " " << new_w << " " << new_h << ";";
+}
+
 
 void solve(int width, int height) {
     int my_matter, opp_matter;
     cin >> my_matter >> opp_matter;
-    vvi scrap_amount(height, vi(width)), owner(height, vi(width));
-    vvi units(height, vi(width)), recycler(height, vi(width));
-    vvi can_build(height, vi(width)), can_spawn(height, vi(width));
-    vvi in_range_of_recycler(height, vi(width));
+    vvi         scrap_amount(width, vi(height));
+    vvi                owner(width, vi(height));
+    vvi                units(width, vi(height));
+    vvi             recycler(width, vi(height));
+    vvi            can_build(width, vi(height));
+    vvi            can_spawn(width, vi(height));
+    vvi in_range_of_recycler(width, vi(height));
 
-    rep(i,height) {
+    rep(i, height) {
         rep(j, width) {
-            cin >> scrap_amount[i][j] >> owner[i][j]
-            >> units[i][j] >> recycler[i][j] >> can_build[i][j]
-            >> can_spawn[i][j] >> in_range_of_recycler[i][j];
+            cin 
+            >> scrap_amount[j][i] 
+            >> owner[j][i]
+            >> units[j][i] 
+            >> recycler[j][i] 
+            >> can_build[j][i]
+            >> can_spawn[j][i] 
+            >> in_range_of_recycler[j][i];
         }
     }
 
-    rep(i, height) {
-        dbg(units[i]);
-    }
-
-    rep(i, height) {
-        rep(j, width) {
+    rep(i, width) {
+        rep(j, height) {
             if (units[i][j] > 0 and owner[i][j] == 1) {
                 rep(k, 4) {
-                    int ni = i + dx[k], nj = j + dy[k];
-                    if (inc(ni, 0, height) and inc(nj, 0, width) 
-                    and scrap_amount[ni][nj] > 0) {
-                        cout << "MOVE " << 1 << " " << j << " " << i << " " << nj << " " << ni << ";";
+                    int ni = i + dx[k];
+                    int nj = j + dy[k];
+                    if (inc(ni, 0, width) and inc(nj, 0, height) 
+                        and scrap_amount[ni][nj] > 0) {
+                        move_action(1, i, j, ni, nj);
                         units[i][j]--;
                         units[ni][nj]++;
+                        break;
                     }
                 }
             }
